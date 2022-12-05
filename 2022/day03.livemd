@@ -1,0 +1,266 @@
+<!-- livebook:{"persist_outputs":true} -->
+
+# Day 03
+
+```elixir
+Mix.install(
+  [
+    {:kino, "~> 0.7.0"},
+    {:kino_aoc, git: "https://github.com/ljgago/kino_aoc"}
+  ],
+  force: true
+)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+* Getting kino_aoc (https://github.com/ljgago/kino_aoc)
+remote: Enumerating objects: 58, done.        
+remote: Counting objects: 100% (58/58), done.        
+remote: Compressing objects: 100% (39/39), done.        
+remote: Total 58 (delta 16), reused 51 (delta 10), pack-reused 0        
+origin/HEAD set to main
+Resolving Hex dependencies...
+Resolution completed in 0.149s
+New:
+  castore 0.1.19
+  finch 0.14.0
+  hpax 0.1.2
+  jason 1.4.0
+  kino 0.7.0
+  mime 2.0.3
+  mint 1.4.2
+  nimble_options 0.5.1
+  nimble_pool 0.2.6
+  req 0.3.2
+  table 0.1.2
+  telemetry 1.1.0
+* Getting kino (Hex package)
+* Getting req (Hex package)
+* Getting finch (Hex package)
+* Getting jason (Hex package)
+* Getting mime (Hex package)
+* Getting castore (Hex package)
+* Getting mint (Hex package)
+* Getting nimble_options (Hex package)
+* Getting nimble_pool (Hex package)
+* Getting telemetry (Hex package)
+* Getting hpax (Hex package)
+* Getting table (Hex package)
+==> table
+Compiling 5 files (.ex)
+Generated table app
+==> mime
+Compiling 1 file (.ex)
+Generated mime app
+==> nimble_options
+Compiling 3 files (.ex)
+Generated nimble_options app
+==> kino
+Compiling 36 files (.ex)
+Generated kino app
+===> Analyzing applications...
+===> Compiling telemetry
+==> jason
+Compiling 10 files (.ex)
+Generated jason app
+==> hpax
+Compiling 4 files (.ex)
+Generated hpax app
+==> nimble_pool
+Compiling 2 files (.ex)
+Generated nimble_pool app
+==> castore
+Compiling 1 file (.ex)
+Generated castore app
+==> mint
+Compiling 1 file (.erl)
+Compiling 19 files (.ex)
+Generated mint app
+==> finch
+Compiling 13 files (.ex)
+Generated finch app
+==> req
+Compiling 5 files (.ex)
+Generated req app
+==> kino_aoc
+Compiling 3 files (.ex)
+Generated kino_aoc app
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+:ok
+```
+
+## Section
+
+<!-- livebook:{"attrs":{"day":"3","session_secret":"SESSION","variable":"puzzle_input","year":"2022"},"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, puzzle_input} = KinoAOC.download_puzzle("2022", "3", System.fetch_env!("LB_SESSION"))
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:ok,
+ "DMwrszrfMzSSCpLpfCCn\nRMvhZhQqlvhMvRtbvbcPclPlncddppLTdppd\ntVMQhFtjjWmsFJsmsW\ntrRtvNhfJhSzzSTFVhQQZQhHGphP\nCnLMBWLwDMgMcwwdngdHGPVTQGpTHZdGPGpd\nLLDqcDgwqCMnLWqtvzrzbbtJqPjJ\nwQQwHNQLmbWQbQRHwHNFBbwqPfjqlzRMGRqzpSfvPlzplM\nnCtGCZZtsGsrtDMZpfMpSlMlvlZq\ncJctJCgVJsCJnDTsCthGhGLwBWBbbQmLbgQLQQdWbbbQ\nZWnNlTNTnhhQQlDNdmmpwrrrqBwjwjZd\nGzvlVRSfvMVMvGlSpdCCdjmfpmBCdsqB\nbzlFlLzJWLHHttLL\nSmzFhVDzrmSrszVDVhSVbhZcCZdfZNcnMfMbZnNN\nPTTRGqwqTqWRwLgTLTZGnCbZbNddZCCtMcNs\nsgPqPqgJgWWqjjwgwLLVFBFSVmvmBBrmJJDSvp\nCBccfSBhcSBddfgtlJmmmwmPRwmh\nFpTzzGWHWprgDtJlDZDPFR\nHbbTzWnTrnWtCbQBbQqQbSjf\nfPHspCjgwZggSvZQ\nRrNhzFZFcNzFLNLNwQlSlLnv\nTRFrcDVrrRmrhFRZzVrczqhRpjqjsssCpfHjsCdpsPfpjCMC\nZBnBTMVTSbGbTVTGbCPgqsgPtHtgCcPtBB\nldDrmnnNrzhdhfgcsHqcsfCcsCHg\nzFdrzNdzQNDDhFdWldDrJTbZTbLZJVVVpMVWVnLS\npLnpQNhBbnWvbsWm\nFrFwjlTPTdTqqrDZWbvmZbpSgmJWvbgS\nRqDqRrdGFpGRFrFFdTNzCcHcHLHBzQCcNNGN\nbvRCtbtCPfSGtCcvCbPNlglqgqlGZMzTgnlZnq\nhrmWWFspsHWrzNwTnFlTMTwFFn\nHpjJDWBQmmQdRffbPtSzdJ\nGpHjFsjMFpCpMWjMGCqWmmqrWQtmthdbDbbD\nfzgLTJwJPSgJgzSzPfhmqmQhQHzQtbQDrrmq\nRNlBRwHfRJHLLfHTwLSBppNGvjNMFFCVpVFcvcFC\nSfQnfSFHfnvMtQQSnHJtMffsdTlZtdZmtllmTlmlRRbBRLDb\nhrwhWWwqzPrcCzwwzmPlRbdmlQDTPPBLDl\nCpwCzrwGzNCWrJnMvpMvfJVFvQ\nrCRPpgSggcpqrhPrCDDTLsMLDSDGLTMGVs\nHdvzmRWmlHzwvWHvRHRvHJbDFsdMssQQVGMDTMDLVLLFLT\nJBlBnnWBJlCqZRRqRBpr\nGtZllZDlfDpGHZtZBGBZpDmzQzzCSVVFHmmmsPCQWWSS\nJvFJJrwvNNcJTnbrTRNRSCzqwSsVPCPQqmCQszVm\nJLMnTbLnMgBhDFDf\nlffDhtgDJzCJNGGTzWTRRnRvBv\nqpbpdwqZwqZSwMPSqdQcQmTRnWvnBnRBQBtVnTvWmB\nSccbbwSbZbFPswpSZtgFlClLhgChhhNfJlFj\nClmCjCJBjwBVwJGjlGNFJlVMHSrfpDpTfrHMcHTppQVrHp\ndRLZWLvWSHmTccWW\nggtqzmRZnmhghZhZghntdqsvBbjlbNFFBPwNNJNNCBlwPGBz\nHZmsFZQpvZsWCZQvWrghGrhtgNzdHddHGh\nfWSbqWDJVwcSccNzrNhcBtGcgG\nVqVfTJnbWjqTSqbwDRfRvQvFpFLRpZsssQsCQZ\nFpFZNfplSTJmbZzddGzhDrWh\nLqLPPQjLLRMPqvjLLHQrLqrRWdzHnGhdthttGGbbDWhDDdWz\nsMLMgvRLgscrLrRQvwmTNNfpNplglplfmp\nMPVBmCmWGWRPPqRhLcnjcvjjcpjMvp\ntzwrwsJlrldJsrsrTtrzrTtSNnLJSShnjcncvnvqnSFnqN\nrswrzsbdwDHHbWZqVfWV\ndVmmMTmBPTrCBRMCqFHSWFFHWzCvCz\njNqfGsDqtsjGjQjDlcJFFFznFtzznvtFpFFp\nfNNhgsDcfNflqchVRdgVrRPRdVTRRb\nHJPLwgLvjttmgHJFjwHgtlsBbNbbNsPpblspTllThT\nMzmcRRrdDMVTzbhNNSszhl\nmCDDVqdVcdDrqfcCnrFwtGwvngwvtWJtFjWW\ndFDpmttBlvNNgWlglNDBFttmTGHTcSSJJHHnMsJsGGSdqcJj\nzLbwMLVQbQRwVsJsSHSsHcJqbj\nwfVZLPzfZZmpMZZMBl\nPZHZMJSTBWHNWSHzVnhhfnhThhpnpC\njFdBBtrFjpfnjfnf\nccGrbblbGRDQMlvmQBvmBl\nPCCTsnbPbHDnlDfDNB\nrMjQltgSqtvMjScQggjfVVzBzFHzGfVGDLGBqB\nvdtrMSttcdwcpSQSdglMrtWRRPJZCpsRZJmWRRWChWPh\npWzbsPCCPPpbptSMCJJwBQQGQt\ncDDmcTTRRqzFRddVTSJwMShMtBwhwQMDwv\nHldqVmVlZdLTcmRFdrngNNzrffjWpPLggP\nJPqvjJmmqvSLmPtpZdcftdmtfdCC\nswwhDRwBBHjFFBtBfZ\nRRzNQDwznDsDwWJjLNlrSPLSTr\nVQmdRLvDlmqZdFrBBJdW\nCMstGsnHnHGGMrMZwMpwBSbW\nGnsshssNfjtsnggnHCGhjtmfLQQczllvDRVTTQllQWlQ\ndhbNbswbwVdNtVdstBtgbNQTBCCSFTmfmMFmfRqQmmQM\nHFljLrvZfMQQQPvm\nWrpznLZZrnplpWbgdFcFsNzszgst\nLjddfTlMccnBfDQBtBQb\nZRSNchHwhNNCHNSWPQFFFHDBBtnQDH\nCNpZshSZgpwJmpdLMlplMc\nbTmTFmqzgbBntRVsFvVwcv\nCZfMrlZLLLMlfPZRLRHGstnjGwtvGcsSVwtcSGvn\nClZpMLCRMZMrHMLmWpqQBpzpgQzmbg\njDmSSGWDDdWdSqqDDqCqpJzqRRqpJnRsMRcMzM\nlPgNPvPrrgNrPhNszFggnRzccbMJgz\nZQTHQvQTZPrrQlBBrNvQZZGtTtGdsVCGsCTLLGDmLsjt\nrbCfBrbsvQqRFZRNZC\nHLSTcwqwZSQFFgRZ\nwdDwjpMHqJDTMTdqjlfBvGBhsbfhbsnb\nZhZcHHHlhgchHhlCZZhLCCbGdrsBBGPNBjGbsjNNjnJnPn\nwtJqqwDqQQMQFqSqTzwzVTBnGdsjBdnMdPGBBsBdnrjr\nRVzJzmSVZmLLWpCc\ngdqjQQrlhhQlQrhsnjjhLgmmvmHBBmTmZRsHJzTBHRJv\nNwNnGNbGPbmTGpJzppBG\nnDnVDfMDrQqQStgM\nMLbgbppMMgLmHgQttGQJgJrBShwNShWBBSNNrwNqNN\nGnTFlzCVVwPRrVWhSw\nGnDDdvdnZDTdnGMsHbbttZgttLbc\nmdmPmjClrTzqttfm\ncpFnSbcQQsqNNtqWJzHS\nQFpcMMBcZtLpQBjVjZhlPjjVlwvw\nspVsPjTZZMpZMVLDjmdSQJCLJSmLzdJQdl\nHhRnNrqwMhNhnqnHwGNRFBNBrzSCSdQmQCdddbrQSSclSSbQ\nnFNqGRvqBfjMvTssfZ\nFjjzjnpFqqzFFqgFSZjBhHfHhnHRDDwfdTdLfD\nMmCMGCsMWbtJrtCWCbmsmWWhdLGGwRBwdfdLhdTLhHHTBd\nbJmtrRvRjgzFFvVq\nRWwWmVQGMFGmMGVCVWRRZSBgDdSdJGlSJpcBGGSlpJ\nHHhQThnjBDHfSBlS\nbPhNjbsssQzFNQqWmz\nFTDtrjqwwqGtDbGnfBlcnLcWBZwlWn\nmMhRMvJsJvJnMHCvHmhLZLQlhWQBBfPfLPBZ\nHRCCsdNdvNmCvggFStbzjbGSSjjn\nsLGddsvvcZmLvrLMGcMsVnTTlqlHCsTHHVVgVt\nwRbfJPbpNRffRJMBhpDntTCHFNVgqllFlqggHC\nDpfbPhRDJPMJppJwzfpbbDGSjrGZvdccQdjGvQZdvrLz\nwTwLNLVTqnLMsBwfMsJmCj\nJhlGvcdJhSFvFvvvMfgBpCzjzdCfsMMs\nDSlPPJSGWrDcFPhtFhWJZHQZLTQVnRWRbHbZHQQT\nTmTgTrPDNLNVlDrmlbgNmrSSGbzjZGMvjpZjvvphWMzW\nQtBfdfQcdfHtZcnZn" <> ...}
+```
+
+## Puzzle
+
+```elixir
+test_input =
+  "vJrwpWtwJgWrhcsFMMfFFhFp\njqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL\nPmmdzqPrVvPwwTWBwg\nwMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
+ttgJtRGJQctTZtZT\nCrZsJsPPZsGzwwsLwLmpwMDw"
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+"vJrwpWtwJgWrhcsFMMfFFhFp\njqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL\nPmmdzqPrVvPwwTWBwg\nwMqvLMZHhHMvwLHjbvcjnnSBnvTQFn\nttgJtRGJQctTZtZT\nCrZsJsPPZsGzwwsLwLmpwMDw"
+```
+
+```elixir
+defmodule Day03 do
+  def compartment_to_priorities(compartment) do
+    compartment
+    |> Enum.map(fn
+      lower when lower in ?a..?z -> lower - ?a + 1
+      upper when upper in ?A..?Z -> upper - ?A + 27
+    end)
+  end
+
+  def debugaboo(a) do
+    IO.inspect(a)
+    a
+  end
+end
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:module, Day03, <<70, 79, 82, 49, 0, 0, 9, ...>>, {:debugaboo, 1}}
+```
+
+## Part 1
+
+```elixir
+test_input
+# Split into ruck sacks (by \n)
+|> String.split("\n")
+# Divide rucksack into two equal compartments
+|> Enum.map(fn rucksack -> String.split_at(rucksack, rucksack |> String.length() |> div(2)) end)
+# Convert each compartment into char lists
+|> Enum.map(fn {a, b} -> {String.to_charlist(a), String.to_charlist(b)} end)
+|> Enum.map(fn {a, b} ->
+  {Day03.compartment_to_priorities(a), Day03.compartment_to_priorities(b)}
+end)
+|> Enum.map(fn {a, b} ->
+  MapSet.intersection(Enum.into(a, MapSet.new()), Enum.into(b, MapSet.new()))
+  |> MapSet.to_list()
+  |> List.first()
+end)
+|> Enum.sum()
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+157
+```
+
+```elixir
+puzzle_input
+|> String.split("\n")
+# Divide rucksack into two equal compartments
+|> Enum.map(fn rucksack -> String.split_at(rucksack, rucksack |> String.length() |> div(2)) end)
+# Convert each compartment into char lists
+|> Enum.map(fn {a, b} -> {String.to_charlist(a), String.to_charlist(b)} end)
+|> Enum.map(fn {a, b} ->
+  {Day03.compartment_to_priorities(a), Day03.compartment_to_priorities(b)}
+end)
+|> Enum.map(fn {a, b} ->
+  MapSet.intersection(Enum.into(a, MapSet.new()), Enum.into(b, MapSet.new()))
+  |> MapSet.to_list()
+  |> List.first()
+end)
+|> Enum.sum()
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+7811
+```
+
+## Part 2
+
+```elixir
+test_input_2 = "vJrwpWtwJgWrhcsFMMfFFhFp\njqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL\nPmmdzqPrVvPwwTWBwg
+wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn\nttgJtRGJQctTZtZT\nCrZsJsPPZsGzwwsLwLmpwMDw"
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+"vJrwpWtwJgWrhcsFMMfFFhFp\njqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL\nPmmdzqPrVvPwwTWBwg\nwMqvLMZHhHMvwLHjbvcjnnSBnvTQFn\nttgJtRGJQctTZtZT\nCrZsJsPPZsGzwwsLwLmpwMDw"
+```
+
+```elixir
+test_input_2
+# Split into ruck sacks (by \n)
+|> String.split("\n")
+# Turn each rucksack into a character list
+|> Enum.map(fn a -> String.to_charlist(a) end)
+# Turn each ruck sack into a priority list
+|> Enum.map(fn a -> Day03.compartment_to_priorities(a) end)
+# Turn each rucksack into a set
+|> Enum.map(fn a -> Enum.into(a, MapSet.new()) end)
+# Split into groups of three
+|> Enum.chunk_every(3)
+# Find intersection 
+|> Enum.map(fn [a, b, c] ->
+  MapSet.intersection(a, MapSet.intersection(b, c))
+  |> MapSet.to_list()
+  |> List.first()
+end)
+|> Enum.sum()
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+70
+```
+
+```elixir
+puzzle_input
+# Split into ruck sacks (by \n)
+|> String.split("\n")
+# Turn each rucksack into a character list
+|> Enum.map(fn a -> String.to_charlist(a) end)
+# Turn each ruck sack into a priority list
+|> Enum.map(fn a -> Day03.compartment_to_priorities(a) end)
+# Turn each rucksack into a set
+|> Enum.map(fn a -> Enum.into(a, MapSet.new()) end)
+# Split into groups of three
+|> Enum.chunk_every(3)
+# Find intersection 
+|> Enum.map(fn [a, b, c] ->
+  MapSet.intersection(a, MapSet.intersection(b, c))
+  |> MapSet.to_list()
+  |> List.first()
+end)
+|> Enum.sum()
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+2639
+```
