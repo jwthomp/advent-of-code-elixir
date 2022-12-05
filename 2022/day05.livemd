@@ -1,0 +1,1911 @@
+<!-- livebook:{"persist_outputs":true} -->
+
+# Day 05
+
+```elixir
+Mix.install(
+  [
+    {:kino, "~> 0.7.0"},
+    {:kino_aoc, git: "https://github.com/ljgago/kino_aoc"}
+  ],
+  force: true
+)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+* Getting kino_aoc (https://github.com/ljgago/kino_aoc)
+remote: Enumerating objects: 58, done.        
+remote: Counting objects: 100% (58/58), done.        
+remote: Compressing objects: 100% (39/39), done.        
+remote: Total 58 (delta 16), reused 51 (delta 10), pack-reused 0        
+origin/HEAD set to main
+Resolving Hex dependencies...
+Resolution completed in 0.126s
+New:
+  castore 0.1.19
+  finch 0.14.0
+  hpax 0.1.2
+  jason 1.4.0
+  kino 0.7.0
+  mime 2.0.3
+  mint 1.4.2
+  nimble_options 0.5.1
+  nimble_pool 0.2.6
+  req 0.3.2
+  table 0.1.2
+  telemetry 1.1.0
+* Getting kino (Hex package)
+* Getting req (Hex package)
+* Getting finch (Hex package)
+* Getting jason (Hex package)
+* Getting mime (Hex package)
+* Getting castore (Hex package)
+* Getting mint (Hex package)
+* Getting nimble_options (Hex package)
+* Getting nimble_pool (Hex package)
+* Getting telemetry (Hex package)
+* Getting hpax (Hex package)
+* Getting table (Hex package)
+==> table
+Compiling 5 files (.ex)
+Generated table app
+==> mime
+Compiling 1 file (.ex)
+Generated mime app
+==> nimble_options
+Compiling 3 files (.ex)
+Generated nimble_options app
+==> kino
+Compiling 36 files (.ex)
+Generated kino app
+===> Analyzing applications...
+===> Compiling telemetry
+==> jason
+Compiling 10 files (.ex)
+Generated jason app
+==> hpax
+Compiling 4 files (.ex)
+Generated hpax app
+==> nimble_pool
+Compiling 2 files (.ex)
+Generated nimble_pool app
+==> castore
+Compiling 1 file (.ex)
+Generated castore app
+==> mint
+Compiling 1 file (.erl)
+Compiling 19 files (.ex)
+Generated mint app
+==> finch
+Compiling 13 files (.ex)
+Generated finch app
+==> req
+Compiling 5 files (.ex)
+Generated req app
+==> kino_aoc
+Compiling 3 files (.ex)
+Generated kino_aoc app
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+:ok
+```
+
+## Section
+
+<!-- livebook:{"attrs":{"day":"5","session_secret":"SESSION","variable":"puzzle_input","year":"2022"},"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, puzzle_input} = KinoAOC.download_puzzle("2022", "5", System.fetch_env!("LB_SESSION"))
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:ok,
+ "[J]         [B]     [T]    \n        [M] [L]     [Q] [L] [R]    \n        [G] [Q]     [W] [S] [B] [L]\n[D]     [D] [T]     [M] [G] [V] [P]\n[T]     [N] [N] [N] [D] [J] [G] [N]\n[W] [H] [H] [S] [C] [N] [R] [W] [D]\n[N] [P] [P] [W] [H] [H] [B] [N] [G]\n[L] [C] [W] [C] [P] [T] [M] [Z] [W]\n 1   2   3   4   5   6   7   8   9 \n\nmove 6 from 6 to 5\nmove 2 from 5 to 9\nmove 8 from 9 to 1\nmove 3 from 5 to 4\nmove 9 from 1 to 8\nmove 2 from 1 to 5\nmove 1 from 1 to 8\nmove 14 from 8 to 2\nmove 1 from 1 to 2\nmove 2 from 6 to 8\nmove 2 from 5 to 7\nmove 6 from 8 to 6\nmove 4 from 4 to 2\nmove 2 from 4 to 9\nmove 5 from 7 to 4\nmove 2 from 7 to 5\nmove 6 from 2 to 4\nmove 2 from 4 to 7\nmove 4 from 5 to 8\nmove 1 from 5 to 2\nmove 3 from 3 to 5\nmove 3 from 8 to 3\nmove 4 from 3 to 7\nmove 2 from 9 to 8\nmove 1 from 3 to 7\nmove 1 from 6 to 8\nmove 5 from 7 to 1\nmove 3 from 7 to 2\nmove 1 from 6 to 3\nmove 2 from 5 to 9\nmove 5 from 4 to 2\nmove 3 from 5 to 9\nmove 5 from 9 to 6\nmove 2 from 1 to 3\nmove 4 from 4 to 1\nmove 2 from 8 to 1\nmove 18 from 2 to 5\nmove 3 from 4 to 1\nmove 1 from 1 to 2\nmove 1 from 6 to 8\nmove 1 from 7 to 1\nmove 10 from 1 to 5\nmove 1 from 1 to 5\nmove 3 from 8 to 1\nmove 2 from 1 to 5\nmove 3 from 6 to 5\nmove 8 from 2 to 9\nmove 2 from 9 to 7\nmove 3 from 3 to 8\nmove 1 from 4 to 8\nmove 3 from 5 to 3\nmove 15 from 5 to 8\nmove 4 from 6 to 1\nmove 2 from 7 to 4\nmove 9 from 5 to 7\nmove 1 from 6 to 8\nmove 5 from 3 to 5\nmove 5 from 7 to 5\nmove 3 from 1 to 5\nmove 2 from 4 to 8\nmove 3 from 1 to 6\nmove 20 from 5 to 4\nmove 1 from 7 to 6\nmove 21 from 8 to 2\nmove 1 from 3 to 7\nmove 2 from 4 to 2\nmove 1 from 7 to 1\nmove 18 from 2 to 8\nmove 3 from 9 to 2\nmove 1 from 6 to 4\nmove 1 from 1 to 9\nmove 8 from 8 to 6\nmove 4 from 8 to 2\nmove 1 from 2 to 6\nmove 7 from 8 to 5\nmove 2 from 5 to 3\nmove 1 from 9 to 5\nmove 5 from 2 to 4\nmove 1 from 3 to 7\nmove 2 from 5 to 7\nmove 4 from 4 to 9\nmove 2 from 5 to 9\nmove 6 from 2 to 8\nmove 3 from 7 to 3\nmove 2 from 5 to 4\nmove 4 from 8 to 2\nmove 2 from 7 to 4\nmove 7 from 6 to 4\nmove 1 from 8 to 4\nmove 3 from 6 to 7\nmove 2 from 7 to 2\nmove 7 from 9 to 7\nmove 1 from 9 to 2\nmove 3 from 3 to 6\nmove 3 from 7 to 4\nmove 2 from 7 to 9\nmove 6 from 4 to 1\nmove 3 from 7 to 9\nmove 1 from 8 to 5\nmove 1 from 3 to 6\nmove 3 from 9 to 4\nmove 2 from 6 to 4\nmove 3 from 9 to 1\nmove 4 from 2 to 8\nmove 1 from 8 to 5\nmove 9 from 1 to 2\nmove 1 from 6 to 5\nmove 1 from 7 to 2\nmove 1 from 8 to 1\nmove 2 from 8 to 9\nmove 1 from 9 to 8\nmove 1 from 5 to 7\nmove 1 from 7 to 6\nmove 1 from 9 to 8\nmove 1 from 6 to 3\nmove 26 from 4 to 3\nmove 1 from 5 to 8\nmove 3 from 6 to 3\nmove 7 from 4 to 3\nmove 1 from 1 to 3\nmove 1 from 4 to 8\nmove 13 from 3 to 1\nmove 1 from 3 to 4\nmove 12 from 2 to 5\nmove 20 from 3 to 2\nmove 1 from 4 to 1\nmove 4 from 5 to 7\nmove 1 from 7 to 8\nmove 9 from 5 to 2\nmove 5 from 1 to 5\nmove 21 from 2 to 8\nmove 5 from 8 to 4\nmove 4 from 5 to 2\nmove 6 from 1 to 7\nmove 1 from 5 to 4\nmove 4 from 3 to 1\nmove 6 from 1 to 3\nmove 1 from 1 to 9\nmove 6 from 8 to 7\nmove 4 from 8 to 2\nmove 4 from 2 to 7\nmove 5 from 4 to 1\nmove 8 from 8 to 4\nmove 1 from 9 to 6\nmove 18 from 7 to 6\nmove 15 from 6 to 5\nmove 2 from 6 to 8\nmove 2 from 6 to 3\nmove 8 from 3 to 7\nmove 15 from 5 to 7\nmove 3 from 4 to 9\nmove 12 from 2 to 3\nmove 3 from 9 to 4\nmove 6 from 7 to 9\nmove 9 from 4 to 5\nmove 10 from 3 to 5\nmove 9 from 5 to 2\nmove 14 from 7 to 8\nmove 14 from 8 to 5\nmove 4 from 2 to 4\nmove 1 from 4 to 6\nmove 2 from 8 to 4\nmove 3 from 8 to 9\nmove 18 from 5 to 1\nmove 1 from 5 to 9\nmove 1 from 7 to 4\nmove 5 from 5 to 9\nmove 3 from 2 to 4\nmove 13 from 9 to 2\nmove 13 from 2 to 6\nmove 1 from 7 to 3\nmove 3 from 3 to 1\nmove 9 from 6 to 5\nmove 1 from 7 to 8\nmove 20 from 1 to 8\nmove 2 from 2 to 8\nmove 5 from 6 to 9\nmove 15 from 8 to 7\nmove 3 from 5 to 3\nmove 5 from 1 to 3\nmove 2 from 3 to 4\nmove 3 from 9 to 5\nmove 4 from 5 to 2\nmove 4 from 5 to 7\nmove 3 from 4 to 9\nmove 10 from 7 to 8\nmove 2 from 9 to 4\nmove 1 from 5 to 6\nmove 8 from 7 to 9\nmove 1 from 6 to 7\nmove 6 from 3 to 4\nmove 12 from 9 to 8\nmove 1 from 1 to 5\nmove 2 from 7 to 8\nmove 1 from 7 to 5\nmove 1 from 9 to 5\nmove 2 from 2 to 9\nmove 11 fr" <> ...}
+```
+
+## Puzzle
+
+```elixir
+test_input =
+  "    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+"    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"
+```
+
+```elixir
+defmodule Day05 do
+  def cols("", acc), do: acc
+
+  def cols(x, acc) do
+    {a, b} = String.split_at(x, 4)
+    cols(b, acc ++ [String.trim(a)])
+  end
+
+  def transpose([]), do: []
+  def transpose([[] | _]), do: []
+
+  def transpose(a) do
+    [Enum.map(a, &hd/1) | transpose(Enum.map(a, &tl/1))]
+  end
+
+  def remove_items(stacked_columns, num_to_remove, from) do
+    IO.puts("remove-items: num_to_remove: #{num_to_remove} from: #{from}")
+    IO.inspect(stacked_columns)
+
+    {removed_items, remaining_items} =
+      Enum.split(Enum.at(stacked_columns, from, nil), num_to_remove)
+
+    stacked_columns = List.update_at(stacked_columns, from, fn _x -> remaining_items end)
+    {stacked_columns, removed_items}
+  end
+
+  def add_items(stacked_columns, items_to_add, to) do
+    stacked_columns = List.update_at(stacked_columns, to, fn x -> items_to_add ++ x end)
+  end
+
+  def apply_commands(crane_type, stacked_columns, []), do: stacked_columns
+
+  def apply_commands(crane_type, stacked_columns, [[num_to_move, from, to] | commands]) do
+    IO.puts("apply command: #{num_to_move}, #{from}, #{to}")
+    IO.inspect(stacked_columns)
+    # Remove items
+    {stacked_columns, removed_items} = remove_items(stacked_columns, num_to_move, from)
+
+    removed_items =
+      case crane_type do
+        9000 -> Enum.reverse(removed_items)
+        9001 -> removed_items
+      end
+
+    IO.inspect(stacked_columns)
+    IO.inspect(removed_items)
+    stacked_columns = add_items(stacked_columns, removed_items, to)
+    IO.inspect(stacked_columns)
+
+    stacked_columns = apply_commands(crane_type, stacked_columns, commands)
+  end
+
+  def debugaboo(a) do
+    IO.inspect(a)
+    a
+  end
+end
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+warning: variable "stacked_columns" is unused (there is a variable with the same name in the context, use the pin operator (^) to match on it or prefix this variable with underscore if it is not meant to be used)
+  2022/day05.livemd#cell:3wzin4sixl5ep5k7nom3qtbmgyqqrgq7:23: Day05.add_items/3
+
+warning: variable "crane_type" is unused (if the variable is not meant to be used, prefix it with an underscore)
+  2022/day05.livemd#cell:3wzin4sixl5ep5k7nom3qtbmgyqqrgq7:27: Day05.apply_commands/3
+
+warning: variable "stacked_columns" is unused (there is a variable with the same name in the context, use the pin operator (^) to match on it or prefix this variable with underscore if it is not meant to be used)
+  2022/day05.livemd#cell:3wzin4sixl5ep5k7nom3qtbmgyqqrgq7:42: Day05.apply_commands/3
+
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:module, Day05, <<70, 79, 82, 49, 0, 0, 18, ...>>, {:debugaboo, 1}}
+```
+
+## Part 1
+
+```elixir
+# Two sections, the stack and the commands
+[stack, commands_raw] = String.split(test_input, "\n\n")
+
+# Compute columns
+stack_rows = String.split(stack, "\n")
+
+numbers_row = List.last(stack_rows)
+
+numbers_columns =
+  numbers_row
+  |> String.split(" ", trim: true)
+  |> List.last()
+  |> String.to_integer()
+
+stacks = stack_rows -- [numbers_row]
+
+IO.inspect(stacks)
+
+stacked_columns =
+  stacks
+  |> Enum.map(fn x -> Day05.cols(x, []) end)
+  |> Day05.transpose()
+  |> Enum.map(fn x -> Enum.filter(x, fn x -> x != "" end) end)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+["    [D]    ", "[N] [C]    ", "[Z] [M] [P]"]
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+[["[N]", "[Z]"], ["[D]", "[C]", "[M]"], ["[P]"]]
+```
+
+```elixir
+commands =
+  commands_raw
+  |> String.split("\n")
+  |> Enum.map(fn str -> String.split(str, " ") end)
+  |> Enum.map(fn command ->
+    [
+      String.to_integer(Enum.at(command, 1)),
+      String.to_integer(Enum.at(command, 3)) - 1,
+      String.to_integer(Enum.at(command, 5)) - 1
+    ]
+  end)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+[[1, 1, 0], [3, 0, 2], [2, 1, 0], [1, 0, 1]]
+```
+
+```elixir
+Day05.apply_commands(9000, stacked_columns, commands)
+|> Enum.map(fn x -> List.first(x) end)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+apply command: 1, 1, 0
+[["[N]", "[Z]"], ["[D]", "[C]", "[M]"], ["[P]"]]
+remove-items: num_to_remove: 1 from: 1
+[["[N]", "[Z]"], ["[D]", "[C]", "[M]"], ["[P]"]]
+[["[N]", "[Z]"], ["[C]", "[M]"], ["[P]"]]
+["[D]"]
+[["[D]", "[N]", "[Z]"], ["[C]", "[M]"], ["[P]"]]
+apply command: 3, 0, 2
+[["[D]", "[N]", "[Z]"], ["[C]", "[M]"], ["[P]"]]
+remove-items: num_to_remove: 3 from: 0
+[["[D]", "[N]", "[Z]"], ["[C]", "[M]"], ["[P]"]]
+[[], ["[C]", "[M]"], ["[P]"]]
+["[Z]", "[N]", "[D]"]
+[[], ["[C]", "[M]"], ["[Z]", "[N]", "[D]", "[P]"]]
+apply command: 2, 1, 0
+[[], ["[C]", "[M]"], ["[Z]", "[N]", "[D]", "[P]"]]
+remove-items: num_to_remove: 2 from: 1
+[[], ["[C]", "[M]"], ["[Z]", "[N]", "[D]", "[P]"]]
+[[], [], ["[Z]", "[N]", "[D]", "[P]"]]
+["[M]", "[C]"]
+[["[M]", "[C]"], [], ["[Z]", "[N]", "[D]", "[P]"]]
+apply command: 1, 0, 1
+[["[M]", "[C]"], [], ["[Z]", "[N]", "[D]", "[P]"]]
+remove-items: num_to_remove: 1 from: 0
+[["[M]", "[C]"], [], ["[Z]", "[N]", "[D]", "[P]"]]
+[["[C]"], [], ["[Z]", "[N]", "[D]", "[P]"]]
+["[M]"]
+[["[C]"], ["[M]"], ["[Z]", "[N]", "[D]", "[P]"]]
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+["[C]", "[M]", "[Z]"]
+```
+
+```elixir
+puzzle_input = "        [J]         [B]     [T]    
+        [M] [L]     [Q] [L] [R]    
+        [G] [Q]     [W] [S] [B] [L]
+[D]     [D] [T]     [M] [G] [V] [P]
+[T]     [N] [N] [N] [D] [J] [G] [N]
+[W] [H] [H] [S] [C] [N] [R] [W] [D]
+[N] [P] [P] [W] [H] [H] [B] [N] [G]
+[L] [C] [W] [C] [P] [T] [M] [Z] [W]
+ 1   2   3   4   5   6   7   8   9 
+
+move 6 from 6 to 5
+move 2 from 5 to 9
+move 8 from 9 to 1
+move 3 from 5 to 4
+move 9 from 1 to 8
+move 2 from 1 to 5
+move 1 from 1 to 8
+move 14 from 8 to 2
+move 1 from 1 to 2
+move 2 from 6 to 8
+move 2 from 5 to 7
+move 6 from 8 to 6
+move 4 from 4 to 2
+move 2 from 4 to 9
+move 5 from 7 to 4
+move 2 from 7 to 5
+move 6 from 2 to 4
+move 2 from 4 to 7
+move 4 from 5 to 8
+move 1 from 5 to 2
+move 3 from 3 to 5
+move 3 from 8 to 3
+move 4 from 3 to 7
+move 2 from 9 to 8
+move 1 from 3 to 7
+move 1 from 6 to 8
+move 5 from 7 to 1
+move 3 from 7 to 2
+move 1 from 6 to 3
+move 2 from 5 to 9
+move 5 from 4 to 2
+move 3 from 5 to 9
+move 5 from 9 to 6
+move 2 from 1 to 3
+move 4 from 4 to 1
+move 2 from 8 to 1
+move 18 from 2 to 5
+move 3 from 4 to 1
+move 1 from 1 to 2
+move 1 from 6 to 8
+move 1 from 7 to 1
+move 10 from 1 to 5
+move 1 from 1 to 5
+move 3 from 8 to 1
+move 2 from 1 to 5
+move 3 from 6 to 5
+move 8 from 2 to 9
+move 2 from 9 to 7
+move 3 from 3 to 8
+move 1 from 4 to 8
+move 3 from 5 to 3
+move 15 from 5 to 8
+move 4 from 6 to 1
+move 2 from 7 to 4
+move 9 from 5 to 7
+move 1 from 6 to 8
+move 5 from 3 to 5
+move 5 from 7 to 5
+move 3 from 1 to 5
+move 2 from 4 to 8
+move 3 from 1 to 6
+move 20 from 5 to 4
+move 1 from 7 to 6
+move 21 from 8 to 2
+move 1 from 3 to 7
+move 2 from 4 to 2
+move 1 from 7 to 1
+move 18 from 2 to 8
+move 3 from 9 to 2
+move 1 from 6 to 4
+move 1 from 1 to 9
+move 8 from 8 to 6
+move 4 from 8 to 2
+move 1 from 2 to 6
+move 7 from 8 to 5
+move 2 from 5 to 3
+move 1 from 9 to 5
+move 5 from 2 to 4
+move 1 from 3 to 7
+move 2 from 5 to 7
+move 4 from 4 to 9
+move 2 from 5 to 9
+move 6 from 2 to 8
+move 3 from 7 to 3
+move 2 from 5 to 4
+move 4 from 8 to 2
+move 2 from 7 to 4
+move 7 from 6 to 4
+move 1 from 8 to 4
+move 3 from 6 to 7
+move 2 from 7 to 2
+move 7 from 9 to 7
+move 1 from 9 to 2
+move 3 from 3 to 6
+move 3 from 7 to 4
+move 2 from 7 to 9
+move 6 from 4 to 1
+move 3 from 7 to 9
+move 1 from 8 to 5
+move 1 from 3 to 6
+move 3 from 9 to 4
+move 2 from 6 to 4
+move 3 from 9 to 1
+move 4 from 2 to 8
+move 1 from 8 to 5
+move 9 from 1 to 2
+move 1 from 6 to 5
+move 1 from 7 to 2
+move 1 from 8 to 1
+move 2 from 8 to 9
+move 1 from 9 to 8
+move 1 from 5 to 7
+move 1 from 7 to 6
+move 1 from 9 to 8
+move 1 from 6 to 3
+move 26 from 4 to 3
+move 1 from 5 to 8
+move 3 from 6 to 3
+move 7 from 4 to 3
+move 1 from 1 to 3
+move 1 from 4 to 8
+move 13 from 3 to 1
+move 1 from 3 to 4
+move 12 from 2 to 5
+move 20 from 3 to 2
+move 1 from 4 to 1
+move 4 from 5 to 7
+move 1 from 7 to 8
+move 9 from 5 to 2
+move 5 from 1 to 5
+move 21 from 2 to 8
+move 5 from 8 to 4
+move 4 from 5 to 2
+move 6 from 1 to 7
+move 1 from 5 to 4
+move 4 from 3 to 1
+move 6 from 1 to 3
+move 1 from 1 to 9
+move 6 from 8 to 7
+move 4 from 8 to 2
+move 4 from 2 to 7
+move 5 from 4 to 1
+move 8 from 8 to 4
+move 1 from 9 to 6
+move 18 from 7 to 6
+move 15 from 6 to 5
+move 2 from 6 to 8
+move 2 from 6 to 3
+move 8 from 3 to 7
+move 15 from 5 to 7
+move 3 from 4 to 9
+move 12 from 2 to 3
+move 3 from 9 to 4
+move 6 from 7 to 9
+move 9 from 4 to 5
+move 10 from 3 to 5
+move 9 from 5 to 2
+move 14 from 7 to 8
+move 14 from 8 to 5
+move 4 from 2 to 4
+move 1 from 4 to 6
+move 2 from 8 to 4
+move 3 from 8 to 9
+move 18 from 5 to 1
+move 1 from 5 to 9
+move 1 from 7 to 4
+move 5 from 5 to 9
+move 3 from 2 to 4
+move 13 from 9 to 2
+move 13 from 2 to 6
+move 1 from 7 to 3
+move 3 from 3 to 1
+move 9 from 6 to 5
+move 1 from 7 to 8
+move 20 from 1 to 8
+move 2 from 2 to 8
+move 5 from 6 to 9
+move 15 from 8 to 7
+move 3 from 5 to 3
+move 5 from 1 to 3
+move 2 from 3 to 4
+move 3 from 9 to 5
+move 4 from 5 to 2
+move 4 from 5 to 7
+move 3 from 4 to 9
+move 10 from 7 to 8
+move 2 from 9 to 4
+move 1 from 5 to 6
+move 8 from 7 to 9
+move 1 from 6 to 7
+move 6 from 3 to 4
+move 12 from 9 to 8
+move 1 from 1 to 5
+move 2 from 7 to 8
+move 1 from 7 to 5
+move 1 from 9 to 5
+move 2 from 2 to 9
+move 11 from 8 to 1
+move 7 from 1 to 5
+move 3 from 1 to 6
+move 5 from 8 to 9
+move 8 from 4 to 3
+move 4 from 4 to 6
+move 5 from 9 to 3
+move 4 from 4 to 5
+move 2 from 6 to 7
+move 1 from 9 to 5
+move 2 from 7 to 4
+move 12 from 5 to 2
+move 8 from 8 to 9
+move 8 from 8 to 6
+move 9 from 6 to 2
+move 4 from 9 to 2
+move 1 from 5 to 1
+move 5 from 2 to 1
+move 2 from 5 to 4
+move 5 from 2 to 5
+move 5 from 5 to 6
+move 3 from 4 to 7
+move 11 from 2 to 7
+move 2 from 2 to 1
+move 4 from 3 to 7
+move 2 from 2 to 4
+move 6 from 1 to 4
+move 1 from 2 to 8
+move 2 from 9 to 5
+move 4 from 4 to 3
+move 5 from 4 to 1
+move 2 from 2 to 1
+move 1 from 8 to 5
+move 14 from 7 to 6
+move 3 from 9 to 2
+move 15 from 6 to 8
+move 4 from 1 to 3
+move 2 from 2 to 3
+move 1 from 1 to 7
+move 2 from 3 to 5
+move 4 from 5 to 4
+move 1 from 3 to 5
+move 5 from 1 to 6
+move 12 from 6 to 7
+move 7 from 8 to 4
+move 12 from 7 to 9
+move 4 from 7 to 9
+move 1 from 2 to 8
+move 12 from 9 to 4
+move 23 from 4 to 3
+move 1 from 6 to 5
+move 3 from 9 to 3
+move 1 from 7 to 9
+move 1 from 9 to 1
+move 1 from 9 to 7
+move 42 from 3 to 1
+move 3 from 5 to 4
+move 5 from 1 to 3
+move 3 from 4 to 7
+move 1 from 1 to 9
+move 4 from 3 to 8
+move 1 from 3 to 7
+move 1 from 9 to 1
+move 2 from 7 to 8
+move 8 from 1 to 6
+move 2 from 7 to 5
+move 9 from 1 to 2
+move 5 from 2 to 3
+move 3 from 2 to 4
+move 20 from 1 to 2
+move 1 from 1 to 5
+move 1 from 6 to 7
+move 3 from 4 to 7
+move 2 from 3 to 6
+move 3 from 6 to 1
+move 1 from 6 to 4
+move 2 from 1 to 6
+move 3 from 5 to 9
+move 1 from 4 to 3
+move 2 from 7 to 4
+move 6 from 8 to 4
+move 1 from 1 to 9
+move 1 from 2 to 9
+move 2 from 8 to 7
+move 3 from 6 to 2
+move 5 from 7 to 5
+move 4 from 2 to 5
+move 4 from 4 to 6
+move 3 from 9 to 6
+move 4 from 3 to 1
+move 1 from 9 to 2
+move 7 from 8 to 9
+move 4 from 2 to 4
+move 2 from 1 to 7
+move 3 from 4 to 5
+move 4 from 2 to 4
+move 1 from 7 to 4
+move 4 from 2 to 9
+move 7 from 4 to 3
+move 1 from 7 to 3
+move 6 from 2 to 3
+move 2 from 1 to 5
+move 10 from 3 to 6
+move 2 from 6 to 1
+move 2 from 2 to 7
+move 2 from 3 to 1
+move 1 from 7 to 8
+move 11 from 5 to 3
+move 2 from 3 to 1
+move 4 from 6 to 1
+move 1 from 4 to 6
+move 8 from 3 to 4
+move 2 from 5 to 6
+move 3 from 3 to 5
+move 1 from 8 to 4
+move 1 from 4 to 9
+move 2 from 6 to 1
+move 1 from 5 to 1
+move 9 from 4 to 3
+move 5 from 6 to 9
+move 5 from 6 to 7
+move 13 from 9 to 3
+move 5 from 1 to 8
+move 4 from 8 to 4
+move 10 from 3 to 2
+move 3 from 6 to 1
+move 2 from 7 to 9
+move 1 from 8 to 3
+move 1 from 7 to 3
+move 1 from 9 to 5
+move 1 from 6 to 3
+move 7 from 2 to 4
+move 3 from 5 to 2
+move 8 from 3 to 5
+move 7 from 4 to 3
+move 5 from 9 to 7
+move 1 from 7 to 1
+move 9 from 1 to 8
+move 9 from 5 to 8
+move 2 from 7 to 8
+move 3 from 8 to 1
+move 10 from 3 to 6
+move 1 from 1 to 6
+move 5 from 1 to 7
+move 3 from 2 to 8
+move 7 from 8 to 6
+move 7 from 8 to 6
+move 1 from 3 to 5
+move 5 from 7 to 9
+move 4 from 8 to 4
+move 3 from 2 to 8
+move 1 from 7 to 8
+move 3 from 3 to 9
+move 3 from 7 to 4
+move 1 from 7 to 2
+move 9 from 9 to 1
+move 5 from 1 to 9
+move 4 from 8 to 6
+move 1 from 2 to 7
+move 1 from 5 to 3
+move 1 from 3 to 7
+move 1 from 1 to 9
+move 1 from 1 to 7
+move 5 from 9 to 6
+move 2 from 7 to 6
+move 10 from 4 to 8
+move 1 from 4 to 2
+move 1 from 4 to 1
+move 1 from 9 to 2
+move 3 from 1 to 2
+move 1 from 7 to 3
+move 1 from 2 to 1
+move 16 from 6 to 3
+move 9 from 6 to 1
+move 6 from 6 to 1
+move 5 from 6 to 1
+move 3 from 8 to 1
+move 11 from 3 to 4
+move 1 from 6 to 2
+move 3 from 8 to 2
+move 4 from 1 to 6
+move 5 from 3 to 2
+move 1 from 2 to 5
+move 1 from 8 to 5
+move 5 from 8 to 3
+move 4 from 6 to 9
+move 2 from 9 to 6
+move 3 from 3 to 9
+move 1 from 5 to 7
+move 5 from 1 to 6
+move 3 from 6 to 4
+move 2 from 2 to 9
+move 8 from 4 to 2
+move 9 from 1 to 7
+move 3 from 3 to 5
+move 3 from 5 to 7
+move 12 from 7 to 1
+move 5 from 4 to 6
+move 1 from 4 to 5
+move 7 from 1 to 8
+move 5 from 9 to 3
+move 1 from 7 to 4
+move 10 from 1 to 8
+move 1 from 4 to 8
+move 4 from 6 to 8
+move 1 from 6 to 9
+move 2 from 5 to 1
+move 4 from 3 to 4
+move 1 from 1 to 8
+move 4 from 4 to 7
+move 2 from 1 to 8
+move 4 from 6 to 1
+move 3 from 9 to 5
+move 1 from 6 to 5
+move 1 from 3 to 7
+move 24 from 8 to 6
+move 3 from 6 to 5
+move 4 from 6 to 7
+move 1 from 1 to 7
+move 7 from 7 to 6
+move 7 from 5 to 3
+move 13 from 6 to 8
+move 3 from 1 to 2
+move 7 from 6 to 3
+move 12 from 2 to 4
+move 4 from 6 to 9
+move 6 from 3 to 1
+move 1 from 2 to 4
+move 2 from 8 to 7
+move 2 from 2 to 9
+move 6 from 3 to 4
+move 12 from 8 to 2
+move 18 from 2 to 5
+move 10 from 4 to 3
+move 4 from 7 to 3
+move 5 from 4 to 7
+move 3 from 5 to 2
+move 4 from 7 to 9
+move 1 from 5 to 4
+move 3 from 2 to 1
+move 4 from 3 to 6
+move 7 from 5 to 6
+move 2 from 5 to 7
+move 5 from 1 to 7
+move 9 from 7 to 6
+move 8 from 9 to 8
+move 1 from 1 to 3
+move 1 from 3 to 1
+move 10 from 3 to 9
+move 8 from 8 to 4
+move 1 from 3 to 8
+move 1 from 1 to 3
+move 6 from 9 to 1
+move 5 from 5 to 3
+move 5 from 3 to 6
+move 1 from 8 to 9
+move 19 from 6 to 2
+move 13 from 4 to 1
+move 4 from 1 to 5
+move 6 from 2 to 1
+move 2 from 9 to 4
+move 1 from 3 to 1
+move 9 from 2 to 3
+move 4 from 5 to 1
+move 5 from 9 to 6
+move 4 from 3 to 4
+move 3 from 2 to 7
+move 2 from 4 to 8
+move 6 from 1 to 9
+move 1 from 8 to 6
+move 4 from 1 to 5
+move 3 from 4 to 5
+move 1 from 7 to 2
+move 11 from 1 to 6
+move 1 from 2 to 7
+move 5 from 3 to 7
+move 1 from 3 to 4
+move 1 from 4 to 8
+move 3 from 5 to 6
+move 8 from 1 to 7
+move 1 from 8 to 9
+move 1 from 6 to 9
+move 1 from 8 to 5
+move 11 from 6 to 5
+move 12 from 5 to 2
+move 1 from 5 to 2
+move 8 from 7 to 3
+move 1 from 5 to 6
+move 2 from 5 to 6
+move 3 from 7 to 1
+move 6 from 2 to 6
+move 1 from 3 to 1
+move 1 from 4 to 1
+move 4 from 6 to 2
+move 5 from 1 to 5
+move 10 from 2 to 3
+move 2 from 9 to 4
+move 4 from 5 to 8
+move 2 from 2 to 7
+move 12 from 6 to 7
+move 1 from 8 to 2
+move 10 from 3 to 4
+move 2 from 3 to 5
+move 1 from 3 to 1"
+
+# Two sections, the stack and the commands
+[stack, commands_raw] = String.split(puzzle_input, "\n\n")
+
+# Compute columns
+stack_rows = String.split(stack, "\n")
+
+numbers_row = List.last(stack_rows)
+
+numbers_columns =
+  numbers_row
+  |> String.split(" ", trim: true)
+  |> List.last()
+  |> String.to_integer()
+
+stacks = stack_rows -- [numbers_row]
+
+IO.inspect(stacks)
+
+stacked_columns =
+  stacks
+  |> Enum.map(fn x -> Day05.cols(x, []) end)
+  |> Day05.transpose()
+  |> Enum.map(fn x -> Enum.filter(x, fn x -> x != "" end) end)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+["        [J]         [B]     [T]    ", "        [M] [L]     [Q] [L] [R]    ",
+ "        [G] [Q]     [W] [S] [B] [L]", "[D]     [D] [T]     [M] [G] [V] [P]",
+ "[T]     [N] [N] [N] [D] [J] [G] [N]", "[W] [H] [H] [S] [C] [N] [R] [W] [D]",
+ "[N] [P] [P] [W] [H] [H] [B] [N] [G]", "[L] [C] [W] [C] [P] [T] [M] [Z] [W]"]
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+[
+  ["[D]", "[T]", "[W]", "[N]", "[L]"],
+  ["[H]", "[P]", "[C]"],
+  ["[J]", "[M]", "[G]", "[D]", "[N]", "[H]", "[P]", "[W]"],
+  ["[L]", "[Q]", "[T]", "[N]", "[S]", "[W]", "[C]"],
+  ["[N]", "[C]", "[H]", "[P]"],
+  ["[B]", "[Q]", "[W]", "[M]", "[D]", "[N]", "[H]", "[T]"],
+  ["[L]", "[S]", "[G]", "[J]", "[R]", "[B]", "[M]"],
+  ["[T]", "[R]", "[B]", "[V]", "[G]", "[W]", "[N]", "[Z]"],
+  ["[L]", "[P]", "[N]", "[D]", "[G]", "[W]"]
+]
+```
+
+```elixir
+commands =
+  commands_raw
+  |> String.split("\n")
+  |> Enum.map(fn str -> String.split(str, " ") end)
+  |> Enum.map(fn command ->
+    [
+      String.to_integer(Enum.at(command, 1)),
+      String.to_integer(Enum.at(command, 3)) - 1,
+      String.to_integer(Enum.at(command, 5)) - 1
+    ]
+  end)
+
+Day05.apply_commands(9001, stacked_columns, commands)
+|> Enum.map(fn x -> List.first(x) end)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+...
+   "[N]", "[V]", "[N]"],
+  [],
+  ["[N]"],
+  ["[M]", "[D]", "[T]"],
+  ["[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]",
+   "[M]", "[T]", "[G]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]", "[N]", "[B]", "[L]",
+   "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 8, 6, 2
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  [],
+  ["[N]"],
+  ["[M]", "[D]", "[T]"],
+  ["[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]",
+   "[M]", "[T]", "[G]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]", "[N]", "[B]", "[L]",
+   "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 8 from: 6
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  [],
+  ["[N]"],
+  ["[M]", "[D]", "[T]"],
+  ["[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]",
+   "[M]", "[T]", "[G]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]", "[N]", "[B]", "[L]",
+   "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  [],
+  ["[N]"],
+  ["[M]", "[D]", "[T]"],
+  ["[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]",
+   "[M]", "[T]", "[G]"],
+  ["[N]", "[B]", "[L]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"]
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  ["[M]", "[D]", "[T]"],
+  ["[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]",
+   "[M]", "[T]", "[G]"],
+  ["[N]", "[B]", "[L]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 1, 4, 5
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  ["[M]", "[D]", "[T]"],
+  ["[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]",
+   "[M]", "[T]", "[G]"],
+  ["[N]", "[B]", "[L]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 1 from: 4
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  ["[M]", "[D]", "[T]"],
+  ["[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]",
+   "[M]", "[T]", "[G]"],
+  ["[N]", "[B]", "[L]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  ["[D]", "[T]"],
+  ["[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]",
+   "[M]", "[T]", "[G]"],
+  ["[N]", "[B]", "[L]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[M]"]
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  ["[D]", "[T]"],
+  ["[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]",
+   "[W]", "[M]", "[T]", "[G]"],
+  ["[N]", "[B]", "[L]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 2, 4, 5
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  ["[D]", "[T]"],
+  ["[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]",
+   "[W]", "[M]", "[T]", "[G]"],
+  ["[N]", "[B]", "[L]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 2 from: 4
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  ["[D]", "[T]"],
+  ["[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]",
+   "[W]", "[M]", "[T]", "[G]"],
+  ["[N]", "[B]", "[L]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]",
+   "[W]", "[M]", "[T]", "[G]"],
+  ["[N]", "[B]", "[L]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[D]", "[T]"]
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]",
+   "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[N]", "[B]", "[L]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 3, 6, 0
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]",
+   "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[N]", "[B]", "[L]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 3 from: 6
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]",
+   "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[N]", "[B]", "[L]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]",
+   "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[N]", "[B]", "[L]"]
+[
+  ["[N]", "[B]", "[L]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]",
+   "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 6, 1, 5
+[
+  ["[N]", "[B]", "[L]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]",
+   "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 6 from: 1
+[
+  ["[N]", "[B]", "[L]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[L]", "[N]", "[C]", "[N]", "[L]",
+   "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]",
+   "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  ["[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]",
+   "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]"]
+[
+  ["[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]",
+   "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]",
+   "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 1, 2, 0
+[
+  ["[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]",
+   "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]",
+   "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 1 from: 2
+[
+  ["[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[P]", "[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]",
+   "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]",
+   "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  ["[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]",
+   "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]",
+   "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[P]"]
+[
+  ["[P]", "[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]",
+   "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]",
+   "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 1, 3, 0
+[
+  ["[P]", "[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]",
+   "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]",
+   "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 1 from: 3
+[
+  ["[P]", "[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[N]"],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]",
+   "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]",
+   "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  ["[P]", "[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]",
+   "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]",
+   "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[N]"]
+[
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]",
+   "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]",
+   "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 4, 5, 1
+[
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]",
+   "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]",
+   "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 4 from: 5
+[
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]",
+   "[H]", "[L]", "[P]", "[J]", "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]",
+   "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]", "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  [],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[S]", "[W]", "[Q]", "[N]"]
+[
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]",
+   "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  [],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 5, 0, 4
+[
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]",
+   "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  [],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 5 from: 0
+[
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]",
+   "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  [],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]",
+   "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  [],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[N]", "[P]", "[N]", "[B]", "[L]"]
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]",
+   "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 10, 1, 2
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]",
+   "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 10 from: 1
+[
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[V]",
+   "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  ["[V]", "[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]"]
+[
+  [],
+  ["[V]", "[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 2, 8, 3
+[
+  [],
+  ["[V]", "[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 2 from: 8
+[
+  [],
+  ["[V]", "[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[G]", "[P]", "[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  ["[V]", "[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  [],
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[G]", "[P]"]
+[
+  [],
+  ["[V]", "[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 4, 4, 7
+[
+  [],
+  ["[V]", "[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 4 from: 4
+[
+  [],
+  ["[V]", "[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[N]", "[P]", "[N]", "[B]", "[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  ["[V]", "[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  [],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[N]", "[P]", "[N]", "[B]"]
+[
+  [],
+  ["[V]", "[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[N]", "[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 2, 1, 6
+[
+  [],
+  ["[V]", "[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[N]", "[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 2 from: 1
+[
+  [],
+  ["[V]", "[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[N]", "[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[N]", "[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[V]", "[N]"]
+[
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[N]", "[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 12, 5, 6
+[
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[N]", "[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 12 from: 5
+[
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[N]", "[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[N]", "[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+ "[Z]"]
+[
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[N]", "[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 1, 7, 1
+[
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[N]", "[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 1 from: 7
+[
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[N]", "[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  [],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[N]"]
+[
+  [],
+  ["[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 10, 2, 3
+[
+  [],
+  ["[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 10 from: 2
+[
+  [],
+  ["[N]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[C]",
+   "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  ["[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[G]", "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]"]
+[
+  [],
+  ["[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[G]",
+   "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 2, 2, 4
+[
+  [],
+  ["[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[G]",
+   "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 2 from: 2
+[
+  [],
+  ["[N]"],
+  ["[C]", "[S]", "[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[G]",
+   "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  ["[N]"],
+  ["[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[G]",
+   "[P]"],
+  ["[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[C]", "[S]"]
+[
+  [],
+  ["[N]"],
+  ["[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[G]",
+   "[P]"],
+  ["[C]", "[S]", "[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+apply command: 1, 2, 0
+[
+  [],
+  ["[N]"],
+  ["[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[G]",
+   "[P]"],
+  ["[C]", "[S]", "[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+remove-items: num_to_remove: 1 from: 2
+[
+  [],
+  ["[N]"],
+  ["[J]", "[R]", "[W]", "[T]", "[M]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[G]",
+   "[P]"],
+  ["[C]", "[S]", "[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+[
+  [],
+  ["[N]"],
+  ["[R]", "[W]", "[T]", "[M]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[G]",
+   "[P]"],
+  ["[C]", "[S]", "[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+["[J]"]
+[
+  ["[J]"],
+  ["[N]"],
+  ["[R]", "[W]", "[T]", "[M]"],
+  ["[S]", "[W]", "[Q]", "[N]", "[L]", "[N]", "[C]", "[N]", "[L]", "[N]", "[G]",
+   "[P]"],
+  ["[C]", "[S]", "[L]"],
+  ["[D]", "[H]", "[C]", "[W]", "[M]", "[T]", "[G]"],
+  ["[W]", "[Q]", "[D]", "[T]", "[M]", "[W]", "[H]", "[H]", "[L]", "[P]", "[J]",
+   "[Z]", "[V]", "[N]", "[W]", "[D]", "[R]", "[T]", "[G]"],
+  ["[P]", "[N]", "[B]"],
+  ["[P]", "[D]", "[H]", "[G]", "[B]", "[B]"]
+]
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+["[J]", "[N]", "[R]", "[S]", "[C]", "[D]", "[W]", "[P]", "[P]"]
+```
+
+## Part 2
+
+```elixir
+"hi" <> "there"
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+"hithere"
+```

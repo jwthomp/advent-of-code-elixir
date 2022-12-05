@@ -1,6 +1,6 @@
 <!-- livebook:{"persist_outputs":true} -->
 
-# Day 03
+# Day 04
 
 ```elixir
 Mix.install(
