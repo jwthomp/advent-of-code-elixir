@@ -1,0 +1,265 @@
+<!-- livebook:{"persist_outputs":true} -->
+
+# Day 02
+
+```elixir
+Mix.install(
+  [
+    {:kino, "~> 0.7.0"},
+    {:kino_aoc, git: "https://github.com/ljgago/kino_aoc"}
+  ],
+  force: true
+)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+* Getting kino_aoc (https://github.com/ljgago/kino_aoc)
+remote: Enumerating objects: 58, done.        
+remote: Counting objects: 100% (58/58), done.        
+remote: Compressing objects: 100% (39/39), done.        
+remote: Total 58 (delta 16), reused 51 (delta 10), pack-reused 0        
+origin/HEAD set to main
+Resolving Hex dependencies...
+Resolution completed in 0.143s
+New:
+  castore 0.1.19
+  finch 0.14.0
+  hpax 0.1.2
+  jason 1.4.0
+  kino 0.7.0
+  mime 2.0.3
+  mint 1.4.2
+  nimble_options 0.5.1
+  nimble_pool 0.2.6
+  req 0.3.2
+  table 0.1.2
+  telemetry 1.1.0
+* Getting kino (Hex package)
+* Getting req (Hex package)
+* Getting finch (Hex package)
+* Getting jason (Hex package)
+* Getting mime (Hex package)
+* Getting castore (Hex package)
+* Getting mint (Hex package)
+* Getting nimble_options (Hex package)
+* Getting nimble_pool (Hex package)
+* Getting telemetry (Hex package)
+* Getting hpax (Hex package)
+* Getting table (Hex package)
+==> table
+Compiling 5 files (.ex)
+Generated table app
+==> mime
+Compiling 1 file (.ex)
+Generated mime app
+==> nimble_options
+Compiling 3 files (.ex)
+Generated nimble_options app
+==> kino
+Compiling 36 files (.ex)
+Generated kino app
+===> Analyzing applications...
+===> Compiling telemetry
+==> jason
+Compiling 10 files (.ex)
+Generated jason app
+==> hpax
+Compiling 4 files (.ex)
+Generated hpax app
+==> nimble_pool
+Compiling 2 files (.ex)
+Generated nimble_pool app
+==> castore
+Compiling 1 file (.ex)
+Generated castore app
+==> mint
+Compiling 1 file (.erl)
+Compiling 19 files (.ex)
+Generated mint app
+==> finch
+Compiling 13 files (.ex)
+Generated finch app
+==> req
+Compiling 5 files (.ex)
+Generated req app
+==> kino_aoc
+Compiling 3 files (.ex)
+Generated kino_aoc app
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+:ok
+```
+
+## Section
+
+<!-- livebook:{"attrs":{"day":"2","session_secret":"SESSIOM","variable":"puzzle_input","year":"2022"},"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, puzzle_input} = KinoAOC.download_puzzle("2022", "2", System.fetch_env!("LB_SESSIOM"))
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:ok,
+ "C Y\nB Y\nC Y\nB X\nB X\nB X\nC Y\nB Z\nA Z\nA Z\nA Z\nA Y\nA X\nA Z\nA X\nA Z\nC Y\nA X\nA Z\nA Z\nA Z\nA Y\nC Y\nB Z\nB Z\nC Y\nC Y\nC Y\nC Y\nA X\nB Z\nC X\nB X\nA Y\nC X\nC Y\nC Y\nB X\nC X\nB Z\nC Y\nB X\nC Y\nB X\nB X\nC Y\nA X\nB X\nB Z\nB X\nA Z\nB Z\nB X\nB Y\nC Y\nA X\nC Y\nA Z\nC Y\nC Z\nB Z\nC Y\nC Y\nC Y\nB Y\nB X\nB X\nA X\nB Z\nB X\nB X\nB X\nB X\nB Y\nB X\nB X\nB X\nB X\nB Z\nB X\nB X\nB Y\nB X\nC Y\nC Y\nB Z\nA Z\nA X\nB X\nB X\nA X\nB X\nA X\nB X\nA Z\nB Y\nA X\nA Y\nC Y\nA X\nA X\nC Y\nA Z\nB X\nB Y\nC Z\nC Y\nB X\nB X\nA Z\nB X\nB X\nC Y\nA Z\nA Z\nB X\nC X\nB Z\nC Y\nB X\nA Y\nC Y\nB Z\nC Y\nB Z\nA X\nC Y\nC Z\nB X\nB X\nC X\nA X\nB X\nB Z\nB Z\nB Z\nA Y\nB Z\nB X\nC Y\nB Z\nA Z\nC Y\nC Y\nA Z\nC Y\nB X\nB X\nC Y\nB Z\nB Z\nC Y\nA X\nC Y\nC Y\nB X\nB Y\nC Y\nC Y\nA Z\nB Z\nB X\nB X\nC Z\nC Y\nA X\nB Z\nB Y\nC Y\nC Y\nB X\nB Z\nC X\nB X\nC Y\nB Z\nA X\nB X\nB Z\nA X\nC Y\nB X\nB X\nC Y\nA X\nB X\nB Y\nA X\nA Y\nC Y\nC Y\nB X\nA Z\nA X\nB Y\nA X\nA X\nC X\nC Y\nB Y\nA Z\nC X\nA X\nB Z\nB X\nB X\nC Y\nA X\nC X\nC Y\nA X\nC Y\nB X\nB X\nC Y\nC Y\nB X\nA X\nB X\nA X\nC Y\nB Y\nB Z\nB X\nB X\nC X\nC Y\nB Z\nC Y\nC Y\nB X\nA Z\nB Z\nA Z\nA Z\nC Y\nB X\nC Y\nC Y\nC X\nB X\nC X\nC Z\nC Y\nB Z\nC Z\nC Y\nA Z\nB X\nC X\nB Y\nB Z\nC Y\nB Z\nB Z\nB Z\nA Z\nC X\nA Y\nB Z\nA Z\nB Z\nB Y\nA Z\nC Y\nC Y\nB X\nA X\nB X\nC X\nB Y\nC Y\nB Z\nB X\nC Y\nA X\nB Z\nB Y\nC X\nC Y\nB X\nA Z\nA Z\nC Y\nB Z\nB Z\nB X\nB X\nC X\nB X\nB X\nB X\nA Z\nA X\nC Z\nB X\nA Z\nB X\nC X\nB X\nC X\nB Z\nB X\nB X\nA X\nB Z\nB Y\nA Z\nA Z\nC Y\nC Y\nA Z\nA Z\nB X\nA X\nB Z\nC X\nC Y\nC Y\nB Z\nA X\nB Y\nB Z\nA X\nC Y\nB Z\nA X\nB X\nB X\nC Y\nC Z\nA Y\nA X\nC Y\nA Z\nC X\nA Z\nA Z\nC X\nA X\nA Z\nB Z\nA Y\nA Z\nC Y\nB X\nB X\nB Z\nB X\nB X\nB Y\nB X\nB X\nC Y\nB X\nA Z\nB X\nC Y\nA Z\nB Z\nC Y\nC X\nC Y\nB X\nC Y\nB Y\nB X\nB Z\nC Y\nA X\nA X\nC X\nB X\nA X\nC X\nB Y\nB Y\nA Z\nC Z\nC Z\nA X\nC Y\nA Y\nA Z\nB Z\nA Z\nA X\nA Y\nB X\nB Y\nC Y\nA X\nB Y\nC X\nC Y\nB Z\nC Y\nA X\nB Z\nB Z\nA X\nC X\nB X\nA X\nB Z\nC Y\nC Y\nB Y\nA Y\nB X\nB Z\nB X\nC Y\nB X\nC Y\nC X\nA Z\nB Z\nC Y\nB X\nB Z\nB Z\nB Z\nC Y\nC X\nC X\nB X\nA X\nC Y\nC Y\nB X\nB Z\nC Y\nA X\nB X\nB Z\nB Z\nB Y\nA Y\nB X\nB Z\nB X\nA X\nA Z\nA Z\nC X\nB Y\nB Z\nC Z\nB X\nC Y\nB X\nC Y\nB Y\nB Z\nB Y\nB X\nA Z\nC X\nA X\nA Z\nC Y\nB X\nC Y\nC Y\nB X\nC Z\nB Z\nB Z\nC X\nC Y\nA Y\nC Y\nA Y\nB X\nB Y\nA Z\nB Z\nB X\nB X\nA X\nC Y\nB Z\nC Y\nB X\nA Z\nB Z\nC Y\nB Z\nA Z\nC Y\nB X\nB X\nC Y\nC Y\nC Y\nB X\nC Z\nB Z\nB X\nC Y\nC X\nB X\nC Y\nB Y\nB Z\nB Z\nB Y\nB Z\nB Y\nA Z\nB X\nB X\nA Z\nC Z\nA Z\nB X\nC Z\nA X\nB X\nC Y\nB Z\nA Z\nC Y\nC Y\nB Z\nA X\nC Y\nA Z\nB X\nB Z\nB Y\nB X\nB Z\nB X\nC Y\nA X\nB Z\nC Y\nB Z\nB Z\nC Y\nB X\nB X\nA Y\nC Y\nB Z\nB Z\nB X\nB Z\nA X\nA X\nC Y\nB X\nC Y\nA Z\nA X\nB X\nC Y\nB Z\nA Z\nB X\nA X\nB X\nB Y\nA X\nC Z\nA X\nB Y\nB X\nA Y\nC Y\nA Z\nB X\nC Y\nA X\nB X\nC Y\nA Z\nB Y\nA Z\nB Z\nB X\nA X\nB Y\nA X\nA Z\nB Z\nB X\nB Z\nC Y\nC Y\nC Y\nB X\nB Y\nA Z\nA Z\nB X\nB X\nB Y\nA X\nA Z\nC Y\nA Y\nB Z\nA X\nC X\nA Z\nC X\nC Y\nC Y\nB X\nB X\nB Z\nA X\nA Z\nB Y\nB Z\nB X\nB Z\nB X\nC Y\nB X\nC Y\nC Y\nB X\nB X\nC Z\nC Y\nA X\nA Z\nC Y\nC Y\nA X\nA Z\nA X\nC Y\nC Y\nB X\nA X\nC Y\nB X\nB X\nA Z\nB X\nA Z\nA Z\nC Y\nC Y\nB X\nC Y\nB X\nA X\nC Y\nB Z\nA X\nC Y\nB Z\nA X\nA Z\nC Y\nC Y\nB X\nA X\nB X\nB Z\nA Z\nC X\nB Z\nA X\nB Z\nC Y\nB X\nA Z\nC X\nB Z\nA Z\nA X\nC Y\nB X\nC Y\nB X\nA Z\nB Z\nB X\nC X\nB Z\nB Y\nC Y\nB Z\nB Z\nB Z\nB Z\nC Y\nC Y\nA Z\nC Y\nC Z\nC Z\nC Y\nC Y\nB Z\nA Y\nB X\nA Y\nB Z\nA Z\nC Z\nB X\nB X\nC X\nA Z\nC Y\nA Z\nB X\nB X\nA X\nB Z\nB X\nC X\nA Z\nB Y\nA X\nB X\nA Z\nA X\nB Z\nC Y\nB X\nB X\nC Y\nC Y\nB X\nA Y\nC X\nB X\nC X\nB Y\nB X\nC Y\nC Y\nB X\nA Z\nA Z\nA Y\nB Z\nB Z\nB Z\nC Y\nA X\nB X\nC Y\nC Y\nA X\nC Y\nA Z\nB X\nA X\nA Y\nB Z\nB Y\nB Y\nC X\nA Z\nA Z\nB Z\nA Z\nB Z\nB X\nA Z\nB Z\nB Y\nB X\nB X\nB X\nA Y\nA X\nB X\nB X\nA X\nC Y\nB Z\nC Y\nB Y\nA X\nB Z\nA Z\nC Y\nA X\nC Y\nB X\nB Z\nB Z\nC Y\nB Z\nC Y\nB X\nC Y\nA Z\nA X\nB X\nC Y\nA X\nA X\nC Y\nC X\nC Y\nA Z\nB Z\nA X\nC X\nC X\nC Y\nB X\nC X\nA X\nC Y\nB Y\nA X\nC Y\nB X\nA Z\nC Y\nC Y\nA X\nA X\nB X\nB Y\nB Y\nA Y\nA X\nC Y\nA X\nC X\nB X\nC Y\nC Y\nA X\nA Z\nB Z\nB Z\nC Y\nB Z\nB Y\nA X\nC X\nC X\nA X\nC Y\nB Z\nA Z\nB X\nC Y\nC Y\nC X\nC Y\nC X\nA X\nC Y\nB X\nC X\nB X\nA Z\nB Z\nB Z\nB Z\nB X\nB Z\nB X\nB Y\nC Y\nC X\nA Y\nB Z\nB Y\nC Y\nB Z\nA X\nA X\nA Z\nC Y\nA X\nC X\nC Y\nB Y\nB X\nB X\nA X\nB Y\nC Y\nB X\nC X\nC X\nA Z\nA Z\nC Y\nB X\nB Z\nC Y\nB Z\nB Z\nC Y\nC X\nA X\nB Z\nC Y\nC Y\nC Y\nB Z\nB X\nC Y\nB Z\nA X\nB X\nC Y\nA Z\nC Y\nA Z\nA Z\nB Z\nC Y\nA Z\nC Y\nB X\nA X\nA X\nB Z\nC Y\nB Y\nB X\nA Z\nB X\nC Y\nA Z\nC Y\nA X\nA Z\nB X\nB X\nB Y\nB X\nA Z\nC Y\nA X\nC Y\nC Y\nC Y\nC Z\nC Y\nA Z\nA Y\nB Z\nC Y\nB X\nC Y\nC Y\nA Z\nC Z\nC Y\nB X\nC Y\nA Z\nB Z\nB Y\nB Z\nA Z\nB X\nB X\nC X\nB X\nB Z\nA X\nC Y\nC Y\nC Y\nA Z\nB X\nB Y\nA X\nA Z\nC Y\nA Z\nA Z\nB X\nC Y\nB Z\nB Z\nB X\nC X\nA Z\nC X\nB Z\nC Y\nA Z\nB X\nC Y\nB X\nA X\nC Z\nC X\nC Y\nA Z\nC Y\nB X\nB X\nB X\nB X\nB X\nA Y\nC Y\nB X\nA X\nA Z\nA Z\nA X\nC Z\nB Z\nC Y\nB X\nB Z\nA X\nB X\nB X\nC Y\n" <> ...}
+```
+
+## Puzzle
+
+```elixir
+test_input = "A Y\nB X\nC Z"
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+"A Y\nB X\nC Z"
+```
+
+```elixir
+defmodule Score do
+  def convert_to_rps("A"), do: :rock
+  def convert_to_rps("B"), do: :paper
+  def convert_to_rps("C"), do: :scissors
+  def convert_to_rps("X"), do: :rock
+  def convert_to_rps("Y"), do: :paper
+  def convert_to_rps("Z"), do: :scissors
+
+  def convert_to_wtl("X"), do: :lose
+  def convert_to_wtl("Y"), do: :tie
+  def convert_to_wtl("Z"), do: :win
+
+  def rps_value(:rock), do: 1
+  def rps_value(:paper), do: 2
+  def rps_value(:scissors), do: 3
+
+  def winning_status(x, y) when x == y, do: :tie
+  def winning_status(:rock, :paper), do: :lose
+  def winning_status(:rock, :scissors), do: :win
+  def winning_status(:paper, :rock), do: :win
+  def winning_status(:paper, :scissors), do: :lose
+  def winning_status(:scissors, :paper), do: :win
+  def winning_status(:scissors, :rock), do: :lose
+
+  def winning_score(:win), do: 6
+  def winning_score(:tie), do: 3
+  def winning_score(:lose), do: 0
+
+  def score_game({rps_opponent, rps_me}) do
+    win = winning_status(rps_me, rps_opponent)
+    rps_value(rps_me) + winning_score(win)
+  end
+
+  def parse(input) do
+    # "A Y\nB X\nC Z"
+    input
+    # ["A Y", "B X", "C Z"]
+    |> String.split("\n", trim: true)
+    |> Enum.map(fn game_round ->
+      String.split(game_round, " ")
+      |> List.to_tuple()
+    end)
+
+    # [{"A", "Y"}, {"B", "X"}, {"C", "Z"}]
+  end
+
+  def compute_to_x_against(:tie, rps), do: rps
+  def compute_to_x_against(:win, :rock), do: :paper
+  def compute_to_x_against(:win, :paper), do: :scissors
+  def compute_to_x_against(:win, :scissors), do: :rock
+  def compute_to_x_against(:lose, :rock), do: :scissors
+  def compute_to_x_against(:lose, :paper), do: :rock
+  def compute_to_x_against(:lose, :scissors), do: :paper
+end
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:module, Score, <<70, 79, 82, 49, 0, 0, 16, ...>>, {:compute_to_x_against, 2}}
+```
+
+## Test Input
+
+```elixir
+test_input
+# [{"A", "Y"}, {"B", "X"}, {"C", "Z"}]
+|> Score.parse()
+|> Enum.map(fn {a, b} ->
+  {Score.convert_to_rps(a), Score.convert_to_rps(b)}
+end)
+
+# [rock: :paper, paper: :rock, scissors: :scissors]
+# [8, 1, 6]
+|> Enum.map(&Score.score_game/1)
+|> Enum.sum()
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+15
+```
+
+## Part 1
+
+```elixir
+puzzle_input
+|> Score.parse()
+|> Enum.map(fn {a, b} -> {Score.convert_to_rps(a), Score.convert_to_rps(b)} end)
+|> Enum.map(&Score.score_game/1)
+|> Enum.sum()
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+9759
+```
+
+## Part 2
+
+```elixir
+test_input
+|> Score.parse()
+|> Enum.map(fn {a, b} ->
+  {Score.convert_to_rps(a), Score.convert_to_wtl(b)}
+end)
+
+# [rock: :tie, paper: :lose, scissors: :win]
+|> Enum.map(fn {rps, wtl} ->
+  {rps, Score.compute_to_x_against(wtl, rps)}
+end)
+
+#  [rock: :rock, paper: :scissors, scissors: :paper]
+# [4, 9, 2]
+|> Enum.map(&Score.score_game/1)
+|> Enum.sum()
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+12
+```
+
+```elixir
+puzzle_input
+|> Score.parse()
+|> Enum.map(fn {a, b} -> {Score.convert_to_rps(a), Score.convert_to_wtl(b)} end)
+|> Enum.map(fn {rps, wtl} -> {rps, Score.compute_to_x_against(wtl, rps)} end)
+|> Enum.map(&Score.score_game/1)
+|> Enum.sum()
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+12429
+```

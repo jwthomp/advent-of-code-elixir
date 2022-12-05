@@ -1,0 +1,162 @@
+<!-- livebook:{"persist_outputs":true} -->
+
+# Day 01
+
+```elixir
+Mix.install(
+  [
+    {:kino, "~> 0.7.0"},
+    {:kino_aoc, git: "https://github.com/ljgago/kino_aoc"}
+  ],
+  force: true
+)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+* Getting kino_aoc (https://github.com/ljgago/kino_aoc)
+remote: Enumerating objects: 58, done.        
+remote: Counting objects: 100% (58/58), done.        
+remote: Compressing objects: 100% (39/39), done.        
+remote: Total 58 (delta 16), reused 51 (delta 10), pack-reused 0        
+origin/HEAD set to main
+Resolving Hex dependencies...
+Resolution completed in 0.155s
+New:
+  castore 0.1.19
+  finch 0.14.0
+  hpax 0.1.2
+  jason 1.4.0
+  kino 0.7.0
+  mime 2.0.3
+  mint 1.4.2
+  nimble_options 0.5.1
+  nimble_pool 0.2.6
+  req 0.3.2
+  table 0.1.2
+  telemetry 1.1.0
+* Getting kino (Hex package)
+* Getting req (Hex package)
+* Getting finch (Hex package)
+* Getting jason (Hex package)
+* Getting mime (Hex package)
+* Getting castore (Hex package)
+* Getting mint (Hex package)
+* Getting nimble_options (Hex package)
+* Getting nimble_pool (Hex package)
+* Getting telemetry (Hex package)
+* Getting hpax (Hex package)
+* Getting table (Hex package)
+==> table
+Compiling 5 files (.ex)
+Generated table app
+==> mime
+Compiling 1 file (.ex)
+Generated mime app
+==> nimble_options
+Compiling 3 files (.ex)
+Generated nimble_options app
+==> kino
+Compiling 36 files (.ex)
+Generated kino app
+===> Analyzing applications...
+===> Compiling telemetry
+==> jason
+Compiling 10 files (.ex)
+Generated jason app
+==> hpax
+Compiling 4 files (.ex)
+Generated hpax app
+==> nimble_pool
+Compiling 2 files (.ex)
+Generated nimble_pool app
+==> castore
+Compiling 1 file (.ex)
+Generated castore app
+==> mint
+Compiling 1 file (.erl)
+Compiling 19 files (.ex)
+Generated mint app
+==> finch
+Compiling 13 files (.ex)
+Generated finch app
+==> req
+Compiling 5 files (.ex)
+Generated req app
+==> kino_aoc
+Compiling 3 files (.ex)
+Generated kino_aoc app
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+:ok
+```
+
+## Section
+
+<!-- livebook:{"attrs":{"day":"1","session_secret":"SESSION","variable":"puzzle_input","year":"2022"},"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, puzzle_input} = KinoAOC.download_puzzle("2022", "1", System.fetch_env!("LB_SESSION"))
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:ok,
+ "10062\n15651\n1271\n14355\n7220\n\n4878\n1754\n8466\n4741\n2582\n3003\n5327\n3172\n1327\n6310\n\n22413\n4145\n22294\n\n23108\n30453\n\n2084\n3496\n4800\n1388\n8728\n6380\n6397\n2558\n2120\n6159\n\n25265\n20200\n2083\n\n7424\n5830\n2575\n2825\n2234\n6106\n5505\n2847\n2059\n7145\n7223\n\n58621\n\n2926\n9188\n7432\n1639\n7420\n1161\n5517\n2703\n5446\n\n2457\n5814\n1294\n3280\n8531\n8214\n4736\n1964\n1155\n2380\n\n2812\n1827\n5533\n1756\n1491\n4127\n6452\n5935\n1415\n6221\n3489\n2681\n4849\n5250\n\n2922\n10365\n5819\n10227\n2962\n2702\n\n2982\n9254\n14137\n5026\n9374\n\n5933\n2888\n2250\n4514\n1825\n5616\n3497\n2988\n1181\n3836\n1032\n5847\n5383\n\n5044\n5922\n3155\n1610\n5510\n5016\n6666\n7024\n4649\n2764\n6444\n\n12932\n\n4764\n4285\n1278\n5020\n5917\n1888\n4757\n6323\n5067\n1314\n1530\n5748\n5573\n5848\n\n6078\n6687\n5510\n7642\n6719\n4376\n7733\n1356\n4064\n4159\n\n7426\n1147\n4176\n2797\n9484\n7907\n10806\n\n24981\n21675\n9324\n\n5537\n5730\n1280\n2090\n2963\n5992\n6043\n5141\n3039\n2120\n3664\n3816\n3859\n5406\n\n1315\n8662\n2280\n11800\n10201\n3886\n\n3048\n4147\n3299\n3912\n1571\n4582\n1621\n2201\n4543\n5377\n3016\n5297\n5213\n1338\n3929\n\n5456\n4051\n1621\n5228\n2672\n3277\n4006\n4954\n1487\n5361\n3298\n4335\n3015\n1139\n\n2875\n6387\n2926\n5439\n3494\n5287\n3793\n3714\n4944\n1094\n6728\n3302\n6345\n\n9641\n5967\n10265\n1129\n3759\n5632\n4913\n6151\n\n5890\n4285\n3601\n3344\n7294\n6321\n2730\n6352\n2350\n7214\n4034\n1032\n\n4266\n2086\n12754\n8475\n5044\n9616\n\n27815\n19415\n\n7914\n11106\n6938\n10695\n6902\n2983\n3710\n\n7659\n3565\n1310\n11842\n\n8750\n17624\n9697\n16020\n\n4606\n6296\n2321\n1272\n3504\n7121\n2313\n8016\n7910\n4786\n\n11012\n12831\n3980\n12204\n\n7996\n7933\n1500\n1810\n4030\n8645\n1710\n7506\n8096\n8661\n\n5694\n4145\n3095\n3963\n2396\n5197\n6086\n6793\n5924\n5043\n1241\n5011\n\n2410\n7373\n6724\n2641\n1827\n8344\n6833\n8336\n6517\n1376\n\n6084\n9909\n1760\n10864\n4904\n6734\n9492\n\n8002\n4098\n\n17545\n1504\n17040\n14118\n\n1103\n5378\n6135\n6207\n3143\n5550\n5723\n5494\n2841\n1461\n2413\n2252\n1904\n3474\n\n1788\n5889\n7810\n8520\n5415\n4633\n1422\n9526\n6762\n\n1187\n2137\n6551\n8399\n1510\n7099\n3465\n5179\n\n7056\n3142\n3237\n4910\n6656\n3680\n2619\n5549\n5737\n4493\n5359\n1336\n\n4690\n6692\n4638\n5490\n6449\n1518\n5872\n7935\n7742\n1895\n4528\n\n4929\n5947\n5044\n1627\n5037\n6646\n5949\n2142\n2362\n3050\n6390\n5467\n5496\n\n11896\n13381\n1055\n3993\n4275\n12480\n\n1903\n1527\n3280\n3748\n3315\n1058\n2541\n4245\n4386\n4792\n4937\n2345\n2551\n1901\n\n2674\n9184\n3423\n1954\n2788\n5954\n7827\n4466\n4901\n\n4653\n12104\n14737\n8740\n4164\n\n5317\n5734\n4580\n3244\n5509\n4009\n2576\n4137\n1282\n5506\n3530\n3057\n5408\n5952\n1849\n\n9691\n16403\n16828\n\n3653\n6762\n2042\n4618\n4212\n6293\n4782\n2071\n6303\n1662\n6814\n\n3720\n6801\n2350\n4456\n4623\n3242\n2471\n4104\n4096\n3641\n4022\n3702\n3169\n\n7146\n5318\n1820\n3845\n4955\n4134\n8848\n6614\n5497\n\n11545\n4050\n20095\n\n8230\n11577\n6426\n4671\n11838\n\n1726\n7355\n8115\n2780\n\n1795\n4697\n10410\n8064\n2370\n9497\n1221\n\n2909\n6719\n2733\n4335\n1327\n1672\n1297\n6705\n5209\n6690\n5855\n5432\n3804\n\n7874\n7949\n6658\n1621\n8850\n3235\n9142\n2856\n\n6968\n7042\n\n7463\n8035\n4908\n5032\n4791\n2030\n1768\n8611\n2114\n8748\n\n11054\n16021\n9826\n11604\n4819\n\n11214\n4850\n11665\n1891\n1347\n4053\n4570\n\n66862\n\n1597\n6127\n6229\n11518\n9308\n9661\n11410\n\n13224\n1160\n1978\n13018\n14604\n\n2773\n3885\n2383\n2850\n1758\n5724\n4418\n4637\n1510\n3870\n3793\n4116\n6281\n2026\n\n3714\n2840\n2116\n3505\n3941\n6676\n5696\n3216\n6406\n4660\n4974\n2005\n5293\n\n2580\n1645\n5677\n5376\n6527\n4410\n6837\n3069\n2399\n3727\n5658\n4817\n5911\n\n2126\n2851\n2766\n8660\n8181\n3449\n2765\n1299\n\n18470\n9129\n17956\n14494\n\n1033\n4468\n5938\n2874\n2406\n1175\n5997\n\n1256\n7932\n1544\n2772\n5709\n1348\n2919\n\n4399\n1449\n8295\n7470\n2088\n1958\n2857\n1722\n5204\n\n8161\n6865\n6428\n4807\n2173\n8614\n5109\n1769\n2125\n\n1112\n7417\n1328\n6385\n4670\n2840\n3293\n6438\n6639\n6129\n4144\n\n5554\n15529\n1499\n\n9459\n3175\n7412\n10610\n10283\n6807\n10056\n8657\n\n5195\n1397\n5365\n3713\n4376\n4034\n2480\n2665\n2566\n4664\n5262\n5913\n2455\n6048\n4488\n\n10875\n\n5322\n8688\n2636\n14243\n\n11403\n7465\n10079\n2270\n15254\n\n11758\n7630\n5137\n6345\n7119\n10008\n6125\n\n5184\n\n4306\n1159\n6483\n5131\n5009\n4585\n2996\n3514\n4009\n4788\n6841\n2189\n3030\n\n3132\n6730\n5733\n2747\n6464\n5221\n4567\n3528\n4264\n6006\n3295\n\n4829\n23038\n16150\n\n1519\n10692\n11102\n6321\n2948\n11851\n6301\n\n5787\n2664\n6046\n4527\n1955\n5270\n1557\n4567\n5631\n2150\n4612\n3044\n2568\n3589\n5334\n\n2303\n10849\n3983\n10010\n4854\n2111\n\n4576\n1236\n3111\n4898\n5930\n5241\n2783\n5451\n6549\n5623\n7257\n2589\n\n6031\n4307\n6669\n7866\n4333\n2069\n2778\n5463\n7149\n3091\n1001\n\n8737\n1843\n4676\n4381\n6164\n2616\n2453\n1739\n4845\n2909\n\n1396\n2963\n10672\n11217\n9975\n6511\n8694\n\n5262\n3743\n1895\n3811\n6089\n4659\n4195\n4633\n1928" <> ...}
+```
+
+## Part 1
+
+```elixir
+calories_by_elf =
+  puzzle_input
+  |> String.split("\n")
+  |> Stream.chunk_while(
+    0,
+    fn
+      "", acc -> {:cont, acc, 0}
+      val, acc -> {:cont, acc + String.to_integer(val)}
+    end,
+    fn x -> {:cont, x, 0} end
+  )
+  |> Enum.to_list()
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+[48559, 41560, 48852, 53561, 44110, 47548, 51773, 58621, 43432, 39825, 53838, 34997, 40773, 46790,
+ 53804, 12932, 59312, 54324, 43743, 55980, 56680, 38144, 53094, 49900, 56328, 47457, 54447, 42241,
+ 47230, 50248, 24376, 52091, 48145, 40027, 57887, 54588, 52381, 49747, 12100, 50207, 53078, 51765,
+ 35527, 53774, 57449, 60086, 47080, 42529, 43171, 44398, ...]
+```
+
+```elixir
+Enum.max(calories_by_elf)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+70613
+```
+
+## Part 2
+
+```elixir
+calories_by_elf
+|> Enum.sort(:desc)
+|> Enum.take(3)
+|> Enum.sum()
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+205805
+```
